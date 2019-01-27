@@ -2,7 +2,7 @@ var THREEx = THREEx || {}
 
 /**
  * @class
- * 
+ *
  * @return {[type]} [description]
  */
 THREEx.HitTestingTango = function(arContext){
@@ -25,7 +25,7 @@ THREEx.HitTestingTango.prototype.update = function(){
 //////////////////////////////////////////////////////////////////////////////
 /**
  * do the actual testing
- * 
+ *
  * @param {ARjs.Context} arContext - context to use
  * @param {Number} mouseX    - mouse x coordinate in [0, 1]
  * @param {Numer} mouseY    - mouse y coordinate in [0, 1]
@@ -34,18 +34,18 @@ THREEx.HitTestingTango.prototype.update = function(){
 THREEx.HitTestingTango.prototype.test = function(mouseX, mouseY){
 	var vrDisplay = this._arContext._tangoContext.vrDisplay
         if (vrDisplay === null ) return null
-	
+
 	if( vrDisplay.displayName !== "Tango VR Device" )	return null
-	
+
         var pointAndPlane = vrDisplay.getPickingPointAndPlaneInPointCloud(mouseX, mouseY)
         if( pointAndPlane == null ) {
                 console.warn('Could not retrieve the correct point and plane.')
                 return null
         }
-	
+
 	// FIXME not sure what this is
-	var boundingSphereRadius = 0.01	
-	
+	var boundingSphereRadius = 0.01
+
 	// the bigger the number the likeliest it crash chromium-webar
 
         // Orient and position the model in the picking point according

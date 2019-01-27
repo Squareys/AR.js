@@ -30,7 +30,7 @@ ARjs.MarkerControls = THREEx.ArMarkerControls = function(context, object3d, para
 	console.assert(possibleValues.indexOf(this.parameters.changeMatrixMode) !== -1, 'illegal value', this.parameters.changeMatrixMode)
 
 
-        // create the marker Root
+	// create the marker Root
 	this.object3d = object3d
 	this.object3d.matrixAutoUpdate = false;
 	this.object3d.visible = false

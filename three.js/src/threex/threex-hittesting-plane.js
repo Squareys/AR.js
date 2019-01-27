@@ -5,14 +5,14 @@ var THREEx = THREEx || {}
 /**
  * - maybe support .onClickFcts in each object3d
  * - seems an easy light layer for clickable object
- * - up to 
+ * - up to
  */
 THREEx.HitTestingPlane = function(sourceElement){
 	this._sourceElement = sourceElement
 
 	// create _pickingScene
 	this._pickingScene = new THREE.Scene
-	
+
 	// create _pickingPlane
 	var geometry = new THREE.PlaneGeometry(20,20,19,19).rotateX(-Math.PI/2)
 	// var geometry = new THREE.PlaneGeometry(20,20).rotateX(-Math.PI/2)
@@ -29,7 +29,7 @@ THREEx.HitTestingPlane = function(sourceElement){
 	var fullWidth = parseInt(sourceElement.style.width)
 	var fullHeight = parseInt(sourceElement.style.height)
 	// TODO hardcoded fov - couch
-	this._pickingCamera = new THREE.PerspectiveCamera(42, fullWidth / fullHeight, 0.1, 30);	
+	this._pickingCamera = new THREE.PerspectiveCamera(42, fullWidth / fullHeight, 0.1, 30);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -39,7 +39,7 @@ THREEx.HitTestingPlane = function(sourceElement){
 THREEx.HitTestingPlane.prototype.update = function(camera, pickingRoot, changeMatrixMode){
 
 	this.onResize()
-	
+
 
 	if( changeMatrixMode === 'modelViewMatrix' ){
 		// set pickingPlane position
@@ -62,7 +62,7 @@ THREEx.HitTestingPlane.prototype.update = function(camera, pickingRoot, changeMa
 // console.log('pickingPlane position', position.x.toFixed(2), position.y.toFixed(2), position.z.toFixed(2))
 // var position = this._pickingCamera.position
 // console.log('his._pickingCamera position', position.x.toFixed(2), position.y.toFixed(2), position.z.toFixed(2))
-	
+
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -72,9 +72,9 @@ THREEx.HitTestingPlane.prototype.update = function(camera, pickingRoot, changeMa
 THREEx.HitTestingPlane.prototype.onResize = function(){
 	var sourceElement = this._sourceElement
 	var pickingCamera = this._pickingCamera
-	
+
 // FIXME why using css here ??? not even computed style
-// should get the size of the elment directly independantly 
+// should get the size of the elment directly independantly
 	var fullWidth = parseInt(sourceElement.style.width)
 	var fullHeight = parseInt(sourceElement.style.height)
 	pickingCamera.aspect = fullWidth / fullHeight
@@ -89,7 +89,7 @@ THREEx.HitTestingPlane.prototype.test = function(mouseX, mouseY){
 	// convert mouseX, mouseY to [-1, +1]
 	mouseX = (mouseX-0.5)*2
 	mouseY =-(mouseY-0.5)*2
-	
+
 	this._pickingScene.updateMatrixWorld(true)
 
 	// compute intersections between mouseVector3 and pickingPlane
@@ -105,7 +105,7 @@ THREEx.HitTestingPlane.prototype.test = function(mouseX, mouseY){
 	// TODO here do a look at the camera ?
 	var quaternion = new THREE.Quaternion
 	var scale = new THREE.Vector3(1,1,1)//.multiplyScalar(1)
-	
+
 	return {
 		position : position,
 		quaternion : quaternion,

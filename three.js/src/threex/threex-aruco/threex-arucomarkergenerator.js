@@ -1,7 +1,7 @@
 var THREEx = THREEx || {}
 
 THREEx.ArucoMarkerGenerator = function(){
-	
+
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -9,7 +9,7 @@ THREEx.ArucoMarkerGenerator = function(){
 //////////////////////////////////////////////////////////////////////////////
 THREEx.ArucoMarkerGenerator.createSVG = function(markerId, svgSize){
 	var domElement = document.createElement('div');
-	domElement.innerHTML = new ArucoMarker(markerId).toSVG(svgSize);	
+	domElement.innerHTML = new ArucoMarker(markerId).toSVG(svgSize);
 	return domElement
 }
 
@@ -37,11 +37,11 @@ THREEx.ArucoMarkerGenerator.createCanvas = function(markerId, width){
 
 	var arucoMarker = new ArucoMarker(markerId)
 	var marker = arucoMarker.markerMatrix()
-	
+
 	var margin = canvas.width*0.1
 	var innerW = width-margin*2
 	var squareW = innerW/7
-	
+
 	context.fillStyle = 'white'
 	context.fillRect(0, 0, canvas.width, canvas.height)
 	context.fillStyle = 'black'
@@ -54,6 +54,6 @@ THREEx.ArucoMarkerGenerator.createCanvas = function(markerId, width){
 			context.fillRect(margin+(x+1)*squareW, margin+(y+1)*squareW, squareW+1, squareW+1)
 		}
 	}
-	
+
 	return canvas
 }

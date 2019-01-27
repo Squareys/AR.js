@@ -10,13 +10,13 @@ AR.Detector.prototype.detect = function(image){
 
         CV.grayscale(image, this.grey);
         CV.adaptiveThreshold(this.grey, this.thres, opts.adaptativeThreshold.kernelSize, opts.adaptativeThreshold.threshold);
-        
+
         this.contours = CV.findContours(this.thres, this.binary);
-        
+
         this.candidates = this.findCandidates(this.contours, image.width * opts.candidates.minSize, opts.candidates.epsilon, opts.candidates.minLength);
         this.candidates = this.clockwiseCorners(this.candidates);
         this.candidates = this.notTooNear(this.candidates, opts.notTooNear.minDist);
-        
+
         return this.findMarkers(this.grey, this.candidates, opts.findMarkers.warpSize);
 };
 
@@ -56,14 +56,14 @@ THREEx.addArucoDatGui	= function(arucoContext, datGui){
 	onChange();
 
 	datGui.add( options, 'resolution', [ '320x240', '640x480' ]).onChange( onChange )
-	
+
 	var folder = datGui.addFolder('Adaptative Threshold')
 	folder.open()
 	folder.add( arucoContext.detector.datGUIOptions.adaptativeThreshold, 'kernelSize').min(0).step(1)
 		.onChange( onChange )
 	folder.add( arucoContext.detector.datGUIOptions.adaptativeThreshold, 'threshold').min(0).step(1)
 		.onChange( onChange )
-	
+
 	var folder = datGui.addFolder('Candidates')
 	folder.open()
 	folder.add( arucoContext.detector.datGUIOptions.candidates, 'minSize').min(0).max(1)
@@ -77,7 +77,7 @@ THREEx.addArucoDatGui	= function(arucoContext, datGui){
 	folder.open()
 	folder.add( arucoContext.detector.datGUIOptions.notTooNear, 'minDist').min(0).step(1)
 		.onChange( onChange )
-		
+
 	var folder = datGui.addFolder('findMarkers')
 	folder.open()
 	folder.add( arucoContext.detector.datGUIOptions.findMarkers, 'warpSize').min(0).step(1)

@@ -8,7 +8,7 @@ ARjs.MarkersAreaLearning = THREEx.ArMultiMakersLearning = function(arToolkitCont
 	// Init variables
 	this.subMarkersControls = subMarkersControls
 	this.enabled = true
-		
+
 	// listen to arToolkitContext event 'sourceProcessed'
 	// - after we fully processed one image, aka when we know all detected poses in it
 	arToolkitContext.addEventListener('sourceProcessed', function(){
@@ -26,8 +26,8 @@ ARjs.MarkersAreaLearning = THREEx.ArMultiMakersLearning = function(arToolkitCont
  */
 ARjs.MarkersAreaLearning.prototype._onSourceProcessed = function(){
 	var originQuaternion = this.subMarkersControls[0].object3d.quaternion
-	// here collect the statistic on relative positioning 
-	
+	// here collect the statistic on relative positioning
+
 	// honor this.enabled
 	if( this.enabled === false )	return
 
@@ -42,7 +42,7 @@ ARjs.MarkersAreaLearning.prototype._onSourceProcessed = function(){
 	var quaternionDelta = new THREE.Quaternion()
 	var scaleDelta = new THREE.Vector3()
 	var tmpMatrix = new THREE.Matrix4()
-	
+
 	// go thru all the visibleMarkerControls
 	for(var i = 0; i < count; i++){
 		var markerControls1 = visibleMarkerControls[i]
@@ -68,29 +68,29 @@ ARjs.MarkersAreaLearning.prototype._onSourceProcessed = function(){
 					count : 0,
 					position : {
 						sum: new THREE.Vector3(0,0,0),
-						average: new THREE.Vector3(0,0,0),						
+						average: new THREE.Vector3(0,0,0),
 					},
 					quaternion : {
 						sum: new THREE.Quaternion(0,0,0,0),
-						average: new THREE.Quaternion(0,0,0,0),						
+						average: new THREE.Quaternion(0,0,0,0),
 					},
 					scale : {
 						sum: new THREE.Vector3(0,0,0),
-						average: new THREE.Vector3(0,0,0),						
+						average: new THREE.Vector3(0,0,0),
 					},
 				}
 			}
 
-			
+
 			//////////////////////////////////////////////////////////////////////////////
 			//		Compute markerControls2 position relative to markerControls1
 			//////////////////////////////////////////////////////////////////////////////
-			
+
 			// compute markerControls2 position/quaternion/scale in relation with markerControls1
 			tmpMatrix.getInverse(markerControls1.object3d.matrix)
 			tmpMatrix.multiply(markerControls2.object3d.matrix)
 			tmpMatrix.decompose(positionDelta, quaternionDelta, scaleDelta)
-			
+
 			//////////////////////////////////////////////////////////////////////////////
 			//		update statistics
 			//////////////////////////////////////////////////////////////////////////////
@@ -122,8 +122,8 @@ ARjs.MarkersAreaLearning.prototype.computeResult = function(){
 		confidenceFactor: 1,
 	}
 	// TODO here check if the originSubControls has been seen at least once!!
-	
-	
+
+
 	/**
 	 * ALGO in pseudo code
 	 *
@@ -132,13 +132,13 @@ ARjs.MarkersAreaLearning.prototype.computeResult = function(){
 	 * Start Looping
 	 * - For a given sub marker, skip it if it already has a result.
 	 * - if no result, check all seen couple and find n ones which has a progress of 1 or more.
-	 * - So the other seen sub markers, got a valid transformation matrix. 
-	 * - So take local averages position/orientation/scale, compose a transformation matrix. 
+	 * - So the other seen sub markers, got a valid transformation matrix.
+	 * - So take local averages position/orientation/scale, compose a transformation matrix.
 	 *   - aka transformation matrix from parent matrix * transf matrix pos/orientation/scale
-	 * - Multiple it by the other seen marker matrix. 
+	 * - Multiple it by the other seen marker matrix.
 	 * - Loop on the array until one pass could not compute any new sub marker
 	 */
-	
+
 	do{
 		var resultChanged = false
 		// loop over each subMarkerControls
@@ -148,21 +148,21 @@ ARjs.MarkersAreaLearning.prototype.computeResult = function(){
 			var result = subMarkerControls.object3d.userData.result
 			var isLearned = (result !== undefined && result.confidenceFactor >= 1) ? true : false
 			if( isLearned === true )	return
-			
+
 			// console.log('compute subMarkerControls', subMarkerControls.name())
 			var otherSubControlsID = _this._getLearnedCoupleStats(subMarkerControls)
 			if( otherSubControlsID === null ){
 				// console.log('no learnedCoupleStats')
 				return
 			}
-			
+
 			var otherSubControls = _this._getSubMarkerControlsByID(otherSubControlsID)
 
 			var seenCoupleStats = subMarkerControls.object3d.userData.seenCouples[otherSubControlsID]
-			
+
 			var averageMatrix = new THREE.Matrix4()
 			averageMatrix.compose(seenCoupleStats.position.average, seenCoupleStats.quaternion.average, seenCoupleStats.scale.average)
-				
+
 			var otherAverageMatrix = otherSubControls.object3d.userData.result.averageMatrix
 
 			var matrix = new THREE.Matrix4().getInverse(otherAverageMatrix).multiply(averageMatrix)
@@ -173,12 +173,12 @@ ARjs.MarkersAreaLearning.prototype.computeResult = function(){
 				averageMatrix: matrix,
 				confidenceFactor: 1
 			}
-			
+
 			resultChanged = true
 		})
 		// console.log('loop')
 	}while(resultChanged === true)
-	
+
 	// debugger
 	// console.log('json:', this.toJSON())
 	// this.subMarkersControls.forEach(function(subMarkerControls){
@@ -191,14 +191,14 @@ ARjs.MarkersAreaLearning.prototype.computeResult = function(){
 //		Utility function
 //////////////////////////////////////////////////////////////////////////////
 
-/** 
+/**
  * get a _this.subMarkersControls id based on markerControls.id
  */
 ARjs.MarkersAreaLearning.prototype._getLearnedCoupleStats	= function(subMarkerControls){
 
 	// if this subMarkerControls has never been seen with another subMarkerControls
 	if( subMarkerControls.object3d.userData.seenCouples === undefined )	return null
-	
+
 	var seenCouples = subMarkerControls.object3d.userData.seenCouples
 	var coupleControlsIDs = Object.keys(seenCouples).map(Number)
 
@@ -206,7 +206,7 @@ ARjs.MarkersAreaLearning.prototype._getLearnedCoupleStats	= function(subMarkerCo
 		var otherSubControlsID = coupleControlsIDs[i]
 		// get otherSubControls
 		var otherSubControls = this._getSubMarkerControlsByID(otherSubControlsID)
-			
+
 		// if otherSubControls isnt learned, skip it
 		var result = otherSubControls.object3d.userData.result
 		var isLearned = (result !== undefined && result.confidenceFactor >= 1) ? true : false
@@ -215,12 +215,12 @@ ARjs.MarkersAreaLearning.prototype._getLearnedCoupleStats	= function(subMarkerCo
 		// return this seenCouplesStats
 		return otherSubControlsID
 	}
-	
+
 	// if none is found, return null
 	return null
 }
 
-/** 
+/**
  * get a _this.subMarkersControls based on markerControls.id
  */
 ARjs.MarkersAreaLearning.prototype._getSubMarkerControlsByID	= function(controlsID){
@@ -250,7 +250,7 @@ ARjs.MarkersAreaLearning.prototype.toJSON = function(){
 		meta : {
 			createdBy : "Area Learning - AR.js "+THREEx.ArToolkitContext.REVISION,
 			createdAt : new Date().toJSON(),
-			
+
 		},
 		trackingBackend: this._arToolkitContext.parameters.trackingBackend,
 		subMarkersControls : [],
@@ -259,13 +259,13 @@ ARjs.MarkersAreaLearning.prototype.toJSON = function(){
 	var originSubControls = this.subMarkersControls[0]
 	var originMatrixInverse = new THREE.Matrix4().getInverse(originSubControls.object3d.matrix)
 	this.subMarkersControls.forEach(function(subMarkerControls, index){
-		
+
 		// if a subMarkerControls has no result, ignore it
 		if( subMarkerControls.object3d.userData.result === undefined )	return
 
 		var poseMatrix = subMarkerControls.object3d.userData.result.averageMatrix
 		console.assert(poseMatrix instanceof THREE.Matrix4)
-		
+
 
 		// build the info
 		var info = {
@@ -286,8 +286,8 @@ ARjs.MarkersAreaLearning.prototype.toJSON = function(){
 	})
 
 	var strJSON = JSON.stringify(data, null, '\t');
-	
-	
+
+
 	//////////////////////////////////////////////////////////////////////////////
 	//		round matrix elements to ease readability - for debug
 	//////////////////////////////////////////////////////////////////////////////
@@ -302,8 +302,8 @@ ARjs.MarkersAreaLearning.prototype.toJSON = function(){
 		})
 		strJSON = JSON.stringify(tmp, null, '\t');
 	}
-	
-	return strJSON;	
+
+	return strJSON;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -315,7 +315,7 @@ ARjs.MarkersAreaLearning.prototype.toJSON = function(){
  */
 ARjs.MarkersAreaLearning.prototype.resetStats = function(){
 	this.deleteResult()
-	
+
 	this.subMarkersControls.forEach(function(markerControls){
 		delete markerControls.object3d.userData.seenCouples
 	})
