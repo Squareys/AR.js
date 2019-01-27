@@ -127,6 +127,7 @@ AFRAME.registerSystem('arjs', {
 		if( this.data.displayWidth !== -1 )		arProfile.sourceParameters.displayWidth = this.data.displayWidth
 		if( this.data.displayHeight !== -1 )		arProfile.sourceParameters.displayHeight = this.data.displayHeight
 
+		arProfile.sourceParameters.attachTo = this.el.parentNode;
 		arProfile.checkIfValid()
 
 		//////////////////////////////////////////////////////////////////////////////
@@ -210,7 +211,7 @@ AFRAME.registerSystem('arjs', {
 
 				// ugly kludge to get resize on aframe... not even sure it works
 				if( arProfile.contextParameters.trackingBackend !== 'tango' ){
-					arSource.copyElementSizeTo(document.body)
+					arSource.copyElementSizeTo(arProfile.sourceParameters.attachTo)
 				}
 
 				// fixing a-frame css

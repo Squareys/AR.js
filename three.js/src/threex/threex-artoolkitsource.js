@@ -23,6 +23,9 @@ ARjs.Source = THREEx.ArToolkitSource = function(parameters){
 		// resolution displayed for the source
 		displayWidth: 640,
 		displayHeight: 480,
+
+		/* Dom element to attach video feed to */
+		attachTo: null,
 	}
 	//////////////////////////////////////////////////////////////////////////////
 	//		setParameters
@@ -76,7 +79,9 @@ ARjs.Source.prototype.init = function(onReady, onError){
 
 	return this
         function onSourceReady(){
-		document.body.appendChild(_this.domElement);
+		if(!_this.parameters.attachTo)
+			console.log("attachTo not set, attaching to body instead");
+		(_this.parameters.attachTo || document.body).appendChild(_this.domElement);
 
 		_this.ready = true
 
