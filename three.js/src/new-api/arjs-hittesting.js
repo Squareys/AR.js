@@ -3,7 +3,7 @@ var ARjs = ARjs || {}
 
 /**
  * Create an anchor in the real world
- * 
+ *
  * @param {ARjs.Session} arSession - the session on which we create the anchor
  * @param {Object} markerParameters - parameter of this anchor
  */
@@ -29,9 +29,9 @@ ARjs.HitTesting = function(arSession){
 //////////////////////////////////////////////////////////////////////////////
 /**
  * update
- * 
+ *
  * @param {THREE.Camera} camera   - the camera to use
- * @param {THREE.Object3D} object3d - 
+ * @param {THREE.Object3D} object3d -
  */
 ARjs.HitTesting.prototype.update = function (camera, pickingRoot, changeMatrixMode) {
 	// if it isnt enabled, do nothing
@@ -50,7 +50,7 @@ ARjs.HitTesting.prototype.update = function (camera, pickingRoot, changeMatrixMo
 
 /**
  * Test the real world for intersections directly from a DomEvent
- * 
+ *
  * @param {Number} mouseX - position X of the hit [-1, +1]
  * @param {Number} mouseY - position Y of the hit [-1, +1]
  * @return {[ARjs.HitTesting.Result]} - array of result
@@ -61,11 +61,11 @@ ARjs.HitTesting.prototype.testDomEvent = function(domEvent){
 
 	// if it isnt enabled, do nothing
 	if( this.enabled === false )	return []
-	
+
 	if( trackingBackend === 'tango' ){
-        	var mouseX = domEvent.pageX / window.innerWidth
-        	var mouseY = domEvent.pageY / window.innerHeight
-	}else{		
+		var mouseX = domEvent.pageX / window.innerWidth
+		var mouseY = domEvent.pageY / window.innerHeight
+	}else{
 		var mouseX = domEvent.clientX / arSource.domElementWidth()
 		var mouseY = domEvent.clientY / arSource.domElementHeight()
 	}
@@ -75,7 +75,7 @@ ARjs.HitTesting.prototype.testDomEvent = function(domEvent){
 
 /**
  * Test the real world for intersections.
- * 
+ *
  * @param {Number} mouseX - position X of the hit [0, +1]
  * @param {Number} mouseY - position Y of the hit [0, +1]
  * @return {[ARjs.HitTesting.Result]} - array of result
@@ -94,14 +94,14 @@ ARjs.HitTesting.prototype.test = function(mouseX, mouseY){
 	}else{
 		var result = this._hitTestingPlane.test(mouseX, mouseY)
 	}
-			
+
 	// if no result is found, return now
 	if( result === null )	return hitTestResults
 
 	// build a ARjs.HitTesting.Result
 	var hitTestResult = new ARjs.HitTesting.Result(result.position, result.quaternion, result.scale)
 	hitTestResults.push(hitTestResult)
-	
+
 	return hitTestResults
 }
 
@@ -110,7 +110,7 @@ ARjs.HitTesting.prototype.test = function(mouseX, mouseY){
 //////////////////////////////////////////////////////////////////////////////
 /**
  * Contains the result of ARjs.HitTesting.test()
- * 
+ *
  * @param {THREE.Vector3} position - position to use
  * @param {THREE.Quaternion} quaternion - quaternion to use
  * @param {THREE.Vector3} scale - scale
@@ -123,7 +123,7 @@ ARjs.HitTesting.Result = function(position, quaternion, scale){
 
 /**
  * Apply to a controlled object3d
- * 
+ *
  * @param {THREE.Object3D} object3d - the result to apply
  */
 ARjs.HitTesting.Result.prototype.apply = function(object3d){
@@ -136,7 +136,7 @@ ARjs.HitTesting.Result.prototype.apply = function(object3d){
 
 /**
  * Apply to a controlled object3d
- * 
+ *
  * @param {THREE.Object3D} object3d - the result to apply
  */
 ARjs.HitTesting.Result.prototype.applyPosition = function(object3d){
@@ -149,7 +149,7 @@ ARjs.HitTesting.Result.prototype.applyPosition = function(object3d){
 
 /**
  * Apply to a controlled object3d
- * 
+ *
  * @param {THREE.Object3D} object3d - the result to apply
  */
 ARjs.HitTesting.Result.prototype.applyQuaternion = function(object3d){

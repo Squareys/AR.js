@@ -10,9 +10,9 @@ ARjs.TangoVideoMesh = function(arSession){
 
 	// Create the see through camera scene and camera
 	var sceneOrtho = new THREE.Scene()
-	var cameraOrtho = new THREE.OrthographicCamera( -1, 1, 1, -1, 0, 100 )		
-this._sceneOrtho = sceneOrtho
-this._cameraOrtho = cameraOrtho
+	var cameraOrtho = new THREE.OrthographicCamera( -1, 1, 1, -1, 0, 100 )
+	this._sceneOrtho = sceneOrtho
+	this._cameraOrtho = cameraOrtho
 
 	// tango only - init cameraMesh
 	arContext.addEventListener('initialized', function(event){
@@ -27,30 +27,30 @@ this._cameraOrtho = cameraOrtho
 		videoMesh = THREE.WebAR.createVRSeeThroughCameraMesh(vrDisplay)
 		sceneOrtho.add(videoMesh)
 	})
-	
+
 	//////////////////////////////////////////////////////////////////////////////
 	//		Code Separator
 	//////////////////////////////////////////////////////////////////////////////
-	
+
 	this.update = function(){
 		// sanity check
 		console.assert( arContext.parameters.trackingBackend === 'tango' )
 		// if not yet initialized, return now
 		if( videoMesh === null )	return
 		// Make sure that the camera is correctly displayed depending on the device and camera orientations.
-		THREE.WebAR.updateCameraMeshOrientation(vrDisplay, videoMesh)                        		
+		THREE.WebAR.updateCameraMeshOrientation(vrDisplay, videoMesh)
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////////
 	//		Code Separator
 	//////////////////////////////////////////////////////////////////////////////
-	
+
 	this.render = function(){
 		// sanity check
 		console.assert( arContext.parameters.trackingBackend === 'tango' )
 		// render sceneOrtho
 		renderer.render( sceneOrtho, cameraOrtho )
 		// Render the perspective scene
-		renderer.clearDepth()		
+		renderer.clearDepth()
 	}
 }
