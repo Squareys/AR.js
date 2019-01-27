@@ -1,7 +1,7 @@
 watch: build
 	fswatch -0 src/*/*.js | xargs -0 -n 1 -I {} make build
 
-build: 
+build:
 	(cd src/threex/threex-aruco && make build)
 	echo	> build/ar.js
 	cat 	vendor/jsartoolkit5/build/artoolkit.min.js	\
@@ -12,7 +12,7 @@ build:
 	cat	src/threex/*.js					\
 		src/new-api/*.js 				\
 		src/markers-area/*.js 				>> build/ar.js
-
+j
 .PHONY: build
 
 minify: build
