@@ -106,9 +106,9 @@ ARjs.Session = function(parameters){
 	//////////////////////////////////////////////////////////////////////////////
 	// update artoolkit on every frame
 	this.update = function(){
-		if( arSource.ready === false )	return
+		if( arSource.ready === false )	return false
 
-		arContext.update( arSource.domElement )
+		return arContext.update( arSource.domElement )
 	}
 }
 
