@@ -202,27 +202,6 @@ AFRAME.registerSystem('arjs', {
 			_this.isReady = true
 
 			//////////////////////////////////////////////////////////////////////////////
-			//		awefull resize trick
-			//////////////////////////////////////////////////////////////////////////////
-			// KLUDGE
-			window.addEventListener('resize', onResize)
-			function onResize(){
-				var arSource = _this._arSession.arSource
-
-				// ugly kludge to get resize on aframe... not even sure it works
-				if( arProfile.contextParameters.trackingBackend !== 'tango' ){
-					arSource.copyElementSizeTo(arProfile.sourceParameters.attachTo)
-				}
-
-				// fixing a-frame css
-				var buttonElement = document.querySelector('.a-enter-vr')
-				if( buttonElement ){
-					buttonElement.style.position = 'fixed'
-				}
-			}
-
-
-			//////////////////////////////////////////////////////////////////////////////
 			//		honor .debugUIEnabled
 			//////////////////////////////////////////////////////////////////////////////
 			if( _this.data.debugUIEnabled )	initDebugUI()
@@ -241,21 +220,6 @@ AFRAME.registerSystem('arjs', {
 				containerElement.appendChild(sessionDebugUI.domElement)
 			}
 		})
-
-		//////////////////////////////////////////////////////////////////////////////
-		//		Code Separator
-		//////////////////////////////////////////////////////////////////////////////
-// TODO this is crappy - code an exponential backoff - max 1 seconds
-		// KLUDGE: kludge to write a 'resize' event
-		var startedAt = Date.now()
-		var timerId = setInterval(function(){
-			if( Date.now() - startedAt > 10000*1000 ){
-				clearInterval(timerId)
-				return
-			}
-			// onResize()
-			window.dispatchEvent(new Event('resize'));
-		}, 1000/30)
 	},
 
 	tick : function(now, delta){
