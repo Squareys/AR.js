@@ -127,7 +127,7 @@ AFRAME.registerSystem('arjs', {
 		if( this.data.displayWidth !== -1 )		arProfile.sourceParameters.displayWidth = this.data.displayWidth
 		if( this.data.displayHeight !== -1 )		arProfile.sourceParameters.displayHeight = this.data.displayHeight
 
-		arProfile.sourceParameters.attachTo = this.el.parentNode;
+		arProfile.sourceParameters.attachTo = document.querySelector('a-assets');
 		arProfile.checkIfValid()
 
 		//////////////////////////////////////////////////////////////////////////////
@@ -155,6 +155,9 @@ AFRAME.registerSystem('arjs', {
 				sourceParameters: arProfile.sourceParameters,
 				contextParameters: arProfile.contextParameters
 			})
+
+			/* Set id to be referenced as texture */
+			arSession.arSource.domElement.id = 'video';
 
 			//////////////////////////////////////////////////////////////////////////////
 			//		tango specifics - _tangoPointCloud
