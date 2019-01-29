@@ -110,6 +110,11 @@ ARjs.Session = function(parameters){
 
 		return arContext.update( arSource.domElement )
 	}
+	this.needsUpdate = function(){
+		if( arSource.ready === false )	return false
+
+		return arContext.needsUpdate()
+	}
 }
 
 ARjs.Session.prototype.onResize = function () {

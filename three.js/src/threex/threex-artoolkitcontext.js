@@ -128,16 +128,21 @@ ARjs.Context.prototype.init = function(onCompleted){
 ////////////////////////////////////////////////////////////////////////////////
 //          update function
 ////////////////////////////////////////////////////////////////////////////////
+ARjs.Context.prototype.needsUpdate = function() {
+    // be sure arController is fully initialized
+    if(this.parameters.trackingBackend === 'artoolkit' && this.arController === null) return false;
+
+    // honor this.parameters.maxDetectionRate
+    var present = performance.now()
+    if( this._updatedAt !== null && present - this._updatedAt < 1000/this.parameters.maxDetectionRate ){
+            return false
+    }
+    return true;
+}
 ARjs.Context.prototype.update = function(srcElement){
+        if(!this.needsUpdate()) return false;
 
-	// be sure arController is fully initialized
-        if(this.parameters.trackingBackend === 'artoolkit' && this.arController === null) return false;
-
-	// honor this.parameters.maxDetectionRate
-	var present = performance.now()
-	if( this._updatedAt !== null && present - this._updatedAt < 1000/this.parameters.maxDetectionRate ){
-		return false
-	}
+        var present = performance.now()
 	this._updatedAt = present
 
 	// mark all markers to invisible before processing this frame

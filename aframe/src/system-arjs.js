@@ -222,19 +222,27 @@ AFRAME.registerSystem('arjs', {
 				var sessionDebugUI = new ARjs.SessionDebugUI(arSession)
 				containerElement.appendChild(sessionDebugUI.domElement)
 			}
-		})
+
+			})
 	},
 
 	tick : function(now, delta){
 		var _this = this
 
 		// skip it if not yet isInitialised
-		if( this.isReady === false )	return
+		if( this.isReady === false ) {
+			return
+		}
 
 		var arSession = this._arSession
 
-		// update arSession
-		this._arSession.update()
+		/* Update texture */
+		if(this._videoFeed)
+			this._videoFeed.components['video-feed'].needsUpdate = this._arSession.needsUpdate();
+		else
+			this._videoFeed = document.getElementById('video-plane');
+
+		this._arSession.update();
 
 		if( _this._tangoVideoMesh !== null )	_this._tangoVideoMesh.update()
 
