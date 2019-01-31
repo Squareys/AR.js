@@ -223,7 +223,23 @@ AFRAME.registerSystem('arjs', {
 				containerElement.appendChild(sessionDebugUI.domElement)
 			}
 
-			})
+		});
+		window.addEventListener('resize', onResize)
+		function onResize(){
+			if(_this._arSession)
+				_this._arSession.arSource.copyElementSizeTo(_this.el)
+		}
+		// TODO this is crappy - code an exponential backoff - max 1 seconds
+		// KLUDGE: kludge to write a 'resize' event
+		var startedAt = Date.now()
+		var timerId = setInterval(function(){
+			if( Date.now() - startedAt > 10000*1000 ){
+				clearInterval(timerId)
+				return
+			}
+			// onResize()
+			window.dispatchEvent(new Event('resize'));
+		}, 1000/30)
 	},
 
 	tick : function(now, delta){
